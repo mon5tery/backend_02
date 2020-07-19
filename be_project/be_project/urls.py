@@ -27,8 +27,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('usercreate/', UserCreateView.as_view(), name='usercreate'),
     path('profile/', ProfileDetails.as_view(), name='profile'),
-    path('login/', TokenObtainPairView.as_view(), name="login"),
-    # path('token/refresh/', TokenRefreshView.as_view(), name="token-refresh"),
+    path('api/token/', TokenObtainPairView.as_view(), name="login"),
+    path('token/refresh/', TokenRefreshView.as_view(), name="token-refresh"),
 ]
 
 urlpatterns+=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

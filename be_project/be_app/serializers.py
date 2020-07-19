@@ -10,14 +10,10 @@ def get_token(user):
 
 class UserCreateSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(write_only=True)
-	first_name = serializers.CharField(required=True)
-	last_name = serializers.CharField(required=True)
-	email = serializers.EmailField(required=True)
-	access = serializers.CharField(read_only=True)
 
 	class Meta:
 		model = User
-		fields = ['username', 'password', 'first_name', 'last_name', 'email', 'access', ]
+		fields = ['id', 'username', 'password', 'first_name', 'last_name', 'email', ]
 
 		def create(self, validated_data):
 			username = validated_data['username']
@@ -31,10 +27,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
 			new_user.set_password(password)
 			new_user.save()
 
-			profile = Profile.objects.create(user=new_user)
-			profile.save()
+			# profile = Profile.objects.create(user=new_user)
+			# profile.save()
 
-			validated_data["access"] = get_token(new_user)
 
 			return validated_data
 
