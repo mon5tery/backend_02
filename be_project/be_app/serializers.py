@@ -22,7 +22,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 			last_name = validated_data['last_name']
 			email = validated_data['email']
 
-			new_user = User(username=username, first_name=first_name, last_name=last_name, email=email)
+			new_user = User(username=username, first_name=first_name, last_name=last_name, email=email, )
 
 			new_user.set_password(password)
 			new_user.save()
@@ -31,7 +31,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 			# profile.save()
 
 
-			return validated_data
+			return Profile.objects.create(**validated_data)
 
 
 		def validate_email(self, email):

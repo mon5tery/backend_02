@@ -10,6 +10,16 @@ from .models import Profile as User
 
 class UserCreateView(CreateAPIView):
 	serializer_class = UserCreateSerializer
+
+	def perform_create(self, serializer):
+		queryset = Profile.objects.filter(user=self.request.user.id)
+		if queryset.exists():
+			raise ValidationError('You have already signed up')
+		serializer.save(user=self.request.user)
+
+	# def perform_create(self, serializer):
+	# 	serializer.save(Profile=self.request.user)
+
 	# permission_classes = (permissions.AllowAny,)
 
 	# def post(self, request, *args, **kwargs):
