@@ -1,5 +1,5 @@
 from rest_framework import serializers, permissions, status
-from .models import Profile
+from .models import Profile, Post
 from django.contrib.auth.models import User
 
 
@@ -15,30 +15,30 @@ class UserCreateSerializer(serializers.ModelSerializer):
 		model = User
 		fields = ['id', 'username', 'password', 'first_name', 'last_name', 'email', ]
 
-		def create(self, validated_data):
-			username = validated_data['username']
-			password = validated_data['password']
-			first_name = validated_data['first_name']
-			last_name = validated_data['last_name']
-			email = validated_data['email']
+	def create(self, validated_data):
+		username = validated_data['username']
+		password = validated_data['password']
+		first_name = validated_data['first_name']
+		last_name = validated_data['last_name']
+		email = validated_data['email']
 
-			new_user = User(username=username, first_name=first_name, last_name=last_name, email=email, )
+		new_user = User(username=username, first_name=first_name, last_name=last_name, email=email, )
 
-			new_user.set_password(password)
-			new_user.save()
+		new_user.set_password(password)
+		new_user.save()
 
-			# profile = Profile.objects.create(user=new_user)
-			# profile.save()
-
-
-			return Profile.objects.create(**validated_data)
+		# profile = Profile.objects.create(user=new_user)
+		# profile.save()
 
 
-		def validate_email(self, email):
-			user = User.objects.filter(email=email)
-			if user:
-				raise serializers.ValidationError("Email Exists.")
-			return email
+		return Profile.objects.create(**validated_data)
+
+
+	def validate_email(self, email):
+		user = User.objects.filter(email=email)
+		if user:
+			raise serializers.ValidationError("Email Exists.")
+		return email
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -46,16 +46,16 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Profile
-		fields = ['user', 'first_name', 'last_name', 'image', ]
+		fields = ['username', 'first_name', 'last_name', 'image', 'email', ]
 
 	def get_username(self, obj):
-		return "%s" % (obj.user.username)
+		return obj.user.username
 
 	def get_name(self, obj):
-		return '%s %s' % (obj.user.first_name, obj.user.last_name)
+		return obj.user.first_name, obj.user.last_name
 
-	# def get_email(self, obj):
-	# 	return obj.user.email
+	def get_email(self, obj):
+		return obj.user.email
 
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
@@ -91,7 +91,10 @@ class UserLoginSerializer(serializers.Serializer):
 		return data
 
 
-
+class PostSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Post
+		fields = '__all__'
 
 
 

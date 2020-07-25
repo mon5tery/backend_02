@@ -47,6 +47,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+USER_DETAILS_SERIALIZER = 'rest_auth.views.ProfileDetails' 
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -65,6 +67,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'be_app',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
